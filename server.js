@@ -4,6 +4,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const storeRouter = require("./store/store.router");
 const sequelize = require("./db");
+// const models = require("./models/models");
 
 const port = process.env.PORT || 3001;
 
