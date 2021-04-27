@@ -4,7 +4,10 @@ const cors = require("cors");
 const morgan = require("morgan");
 const storeRouter = require("./store/store.router");
 const sequelize = require("./db");
-// const models = require("./models/models");
+const ApiError = require("./utils/apiError");
+const models = require("./models/models");
+const fileUpload = require("express-fileupload");
+const path = require("path");
 
 const port = process.env.PORT || 3001;
 
@@ -36,6 +39,8 @@ module.exports = class StoreServer {
 
   initMiddlwares() {
     this.server.use(express.json());
+    this.server.use(express.static("static"));
+    this.server.use(fileUpload({}));
     this.server.use(morgan("dev"));
     this.server.use(cors());
     console.log("middlewares initialized");
@@ -44,7 +49,7 @@ module.exports = class StoreServer {
   errorHandling() {
     let status = 500;
     this.server.use((error, req, res, next) => {
-      if (error instanceof Error) {
+      if (error instanceof ApiError) {
         status = error.status;
       }
 
